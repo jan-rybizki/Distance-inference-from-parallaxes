@@ -16,3 +16,16 @@ FROM gedr3mock.main) AS sample
 WHERE parallax_obs > 8
 ```
 The result of the query is stored in data/GeDR3mock_query_distance_prior.fits
+
+We then infer the distances of GCNS stars. The data is again queried and we downsample by a factor of 1000:
+
+``` sql
+SELECT phot_g_mean_mag, phot_rp_mean_mag, source_id, parallax, parallax_error, 
+astrometric_params_solved, nu_eff_used_in_astrometry, pseudocolour, ecl_lat
+FROM gaiaedr3.gaia_source
+WHERE parallax >= 8
+AND MOD(random_index,1000) = 0
+```
+
+First we need to calculate the parallax zero-point correction according to [Lindegren+20](https://ui.adsabs.harvard.edu/abs/2021A%26A...649A...4L/abstract).
+Then we use an MCMC to sample the posterior over the distance parameter. The result are the percentiles and the MCMC convergence indicators as provided by the GCNS.
