@@ -7,7 +7,7 @@ The query is as follows:
 
 ``` sql
 SELECT * FROM(
-SELECT parallax, GAVO_RANDOM_NORMAL(parallax,
+SELECT parallax, GAVO_NORMAL_RANDOM(parallax,
 POWER(10, ((LOG10(parallax_error)+1)*1.3)-1)) AS
 parallax_obs
 -- This adds observational noise to the true
@@ -15,3 +15,4 @@ parallaxes
 FROM gedr3mock.main) AS sample
 WHERE parallax_obs > 8
 ```
+The result of the query is stored in data/GeDR3mock_query_distance_prior.fits
